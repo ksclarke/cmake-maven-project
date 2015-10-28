@@ -1,0 +1,27 @@
+language: java
+
+jdk:
+  - openjdk7
+
+# CMake is 32 bit and Travis VMs are 64 bit; install 32 bit libs before testing
+addons:
+  apt:
+    packages:
+    - gcc-multilib
+
+sudo: false
+
+script:
+  - mvn install
+
+notifications:
+  irc:
+    channels:
+      - irc.freenode.org#freelibrary
+    on_failure: always
+    on_success: always
+  email:
+    recipients:
+      - ksclarke@ksclarke.io
+    on_failure: change
+    on_success: change
