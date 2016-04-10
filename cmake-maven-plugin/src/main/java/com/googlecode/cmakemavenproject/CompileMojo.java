@@ -85,7 +85,8 @@ public class CompileMojo
 			if (!projectDirectory.isDirectory())
 				throw new MojoExecutionException(projectDirectory.getAbsolutePath() + " must be a directory");
 
-			File cmakeFile = new File(project.getBuild().getDirectory(), "dependency/cmake/bin/cmake");
+//			File cmakeFile = new File(project.getBuild().getDirectory(), "dependency/cmake/bin/cmake");
+			File cmakeFile = new File("/usr/bin/cmake");
 			ProcessBuilder processBuilder = new ProcessBuilder(cmakeFile.getAbsolutePath(),
 				"--build", projectDirectory.getPath());
 			if (target != null)

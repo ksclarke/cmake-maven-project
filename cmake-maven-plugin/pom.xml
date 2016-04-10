@@ -4,8 +4,9 @@
 	<parent>
 		<groupId>com.googlecode.cmake-maven-project</groupId>
 		<artifactId>cmake</artifactId>
-		<version>3.4.1-b2-SNAPSHOT</version>
+		<version>3.4.1-b1</version>
 	</parent>
+	<groupId>com.javatechnics</groupId>
 	<artifactId>cmake-maven-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
 	<name>CMake Maven Plugin</name>
@@ -196,13 +197,13 @@
 			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
+<!--		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>cmake-binaries</artifactId>
 			<version>${project.version}</version>
 			<classifier>${cmake.classifier}</classifier>
 			<scope>test</scope>
-		</dependency>
+		</dependency> -->
 	</dependencies>
 
 	<!-- Run tests from ${test-repo} repository instead of the local repo -->
