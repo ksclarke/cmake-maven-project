@@ -93,6 +93,15 @@ public class GenerateMojo
 	@SuppressWarnings("UWF_UNWRITTEN_FIELD")
 	@Parameter(property = "session", required = true, readonly = true)
 	private MavenSession session;
+        
+        @Parameter(property = "use.native.cmake", defaultValue = "false", required = false)
+        private boolean useNativeCmake;
+        
+        @Parameter(property = "cmake.root.dir", defaultValue = "/usr", required = false)
+        private String cmakeRootDir;
+        
+        @Parameter(property = "cmake.child.dir", defaultValue = "bin/cmake", required = false)
+        private String cmakeChildDir;
 
 	@Override
 	public void execute()
@@ -100,13 +109,14 @@ public class GenerateMojo
 	{
 		try
 		{
+                    getLog().info(" **** Using Native CMAKE:" + useNativeCmake);
 			PluginDescriptor pluginDescriptor = (PluginDescriptor) getPluginContext().
 				get("pluginDescriptor");
 			String groupId = pluginDescriptor.getGroupId();
 			String version = pluginDescriptor.getVersion();
 			String classifier = getClassifier();
 			if (!targetPath.exists() && !targetPath.mkdirs())
-				throw new MojoExecutionException("Cannot create " + targetPath.getAbsolutePath());
+				throw new MojoExecutionException(" Cannot create " + targetPath.getAbsolutePath());
 
 			if (classifier == null)
 			{
@@ -127,8 +137,9 @@ public class GenerateMojo
 				else
 					throw new MojoExecutionException("Unsupported os.name: " + os);
 			}
-//			File cmakeDir = new File(project.getBuild().getDirectory(), "dependency/cmake");
-			File cmakeDir = new File("/usr");
+			File cmakeDir = useNativeCmake ? new File(cmakeRootDir) 
+                                                        : new File(project.getBuild().getDirectory(), "dependency/cmake"); 
+                        if (useNativeCmake) getLog().info("*** Using NATIVE CMake.");
 			String binariesArtifact = "cmake-binaries";
 
 			Element groupIdElement = new Element("groupId", groupId);
@@ -140,13 +151,15 @@ public class GenerateMojo
 				versionElement, classifierElement, outputDirectoryElement);
 			Element artifactItemsItem = new Element("artifactItems", artifactItemElement);
 			Xpp3Dom configuration = MojoExecutor.configuration(artifactItemsItem);
-/*			ExecutionEnvironment environment = MojoExecutor.executionEnvironment(project, session,
-				pluginManager);
-			Plugin dependencyPlugin = MojoExecutor.plugin("org.apache.maven.plugins",
-				"maven-dependency-plugin", "2.8");
-			MojoExecutor.executeMojo(dependencyPlugin, "unpack", configuration, environment);
-*/
-			ProcessBuilder processBuilder = new ProcessBuilder(new File(cmakeDir, "bin/cmake").getAbsolutePath(),
+                        if ( ! useNativeCmake){
+                            ExecutionEnvironment environment = MojoExecutor.executionEnvironment(project, session,
+                                    pluginManager);
+                            Plugin dependencyPlugin = MojoExecutor.plugin("org.apache.maven.plugins",
+                                    "maven-dependency-plugin", "2.8");
+                            MojoExecutor.executeMojo(dependencyPlugin, "unpack", configuration, environment);
+                        }
+
+			ProcessBuilder processBuilder = new ProcessBuilder(new File(cmakeDir, cmakeChildDir).getAbsolutePath(),
 				"-G", generator).directory(targetPath);
 			if (options != null)
 				processBuilder.command().addAll(options);
