@@ -4,9 +4,8 @@
 	<parent>
 		<groupId>com.googlecode.cmake-maven-project</groupId>
 		<artifactId>cmake</artifactId>
-		<version>3.4.1-b1</version>
+		<version>3.4.1-b2-SNAPSHOT</version>
 	</parent>
-	<groupId>com.javatechnics</groupId>
 	<artifactId>cmake-maven-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
 	<name>CMake Maven Plugin</name>
