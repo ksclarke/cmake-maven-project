@@ -140,6 +140,7 @@ public class GenerateMojo
 			File cmakeDir = useNativeCmake ? new File(cmakeRootDir) 
                                                         : new File(project.getBuild().getDirectory(), "dependency/cmake"); 
                         if (useNativeCmake) getLog().info("*** Using NATIVE CMake.");
+
 			String binariesArtifact = "cmake-binaries";
 
 			Element groupIdElement = new Element("groupId", groupId);
