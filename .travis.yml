@@ -21,10 +21,9 @@ matrix:
             - gcc-multilib
     - os: osx
       osx_image: xcode10.1
-# Java is not yet supported on the Windows Build Environment
-#    - os: windows
-#      jdk: oraclejdk11
+    - os: windows
 
+before_install: if [ $TRAVIS_OS_NAME = windows ]; then sudo choco install jdk11; fi
 install: true
 script:
   - mvn -N io.takari:maven:wrapper
